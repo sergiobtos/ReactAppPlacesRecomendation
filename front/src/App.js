@@ -6,7 +6,7 @@ import NewPlace from './places/pages/NewPlace';
 const App = () => {
   return <Router>
     <Switch>
-    <Route path="/users" exact> <Users/> </Route>
+    <Route path="/" exact> <Users/> </Route>
     <Route path="/places/new" exact> <NewPlace/> </Route>
     <Redirect to="/" />
     </Switch>

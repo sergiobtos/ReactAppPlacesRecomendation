@@ -3,11 +3,17 @@ import UsersList from "../components/UsersList";
 
 
 const Users = () =>{
-    const USERS = [{id:'u1', 
+    const USERS = [/* {id:'u1', 
     name:'Sergio', 
     image:'https://images.pexels.com/photos/802254/pexels-photo-802254.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
     places:3
-    }];
+    },
+    {id:'u2', 
+    name:'Sergio', 
+    image:'https://images.pexels.com/photos/802254/pexels-photo-802254.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+    places:3
+    } */
+    ];
     return <UsersList items={USERS}/>
 };
 
