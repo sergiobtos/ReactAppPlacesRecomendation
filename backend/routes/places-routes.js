@@ -1,40 +1,26 @@
 const express = require('express');
-
-const HttpError = require('../models/http-error');
+const { check } = require('express-validator');
 const router = express.Router();
 
-const DUMMY = [
-    {
-        id: 'p1',
-        title: 'Empire State Building',
-        description: 'One of the most famous sky scrapers in the world',
-        location: {
-            lat: 40.7484474,
-            lng: -73.9871516
-        },
-        address: '20 W 34th St, New York, NY 10001',
-        creator: 'u1'
-    }
 
-];
+const placesControllers = require('../controllers/places-controllers');
 
-router.get('/:pid', (req, res, next)=>{
-    const placeId = req.params.pid;
-    const place = DUMMY.find(p => {return p.id === placeId});
-    if(!place){
-        return next(new HttpError( 'Could not find a place for the provided place id.', 404));
-    }
-    res.json({place});
-});
 
-router.get('/user/:uid', (req, res, next)=>{
-    const userId = req.params.uid;
-    const place = DUMMY.find(p => {return p.creator === userId});
-    if(!place){
-        return next(new HttpError( 'Could not find a place for the provided user id.', 404));
-    }
-    res.json({place});
-});
+router.get('/:pid', placesControllers.getPlaceById);
 
+router.get('/user/:uid', placesControllers.getPlacesByUserId);
+
+router.post('/', 
+    [check('title').not().isEmpty(), 
+    check('description').isLength({min: 5}),
+    check('address').not().isEmpty()], 
+    placesControllers.createPlace);
+
+router.patch('/:pid',
+    [check('title').not().isEmpty(), 
+    check('description').isLength({min: 5}),
+    placesControllers.updatePlace);
+
+router.delete('/:pid', placesControllers.deletePlace);
 
 module.exports = router;
