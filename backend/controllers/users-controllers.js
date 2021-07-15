@@ -4,15 +4,6 @@ const { v4 : uuid} = require ('uuid');
 const HttpError = require('../models/http-error');
 const User = require('../models/user');
 
-let DUMMY_USERS = [
-    {
-        id: uuid(),
-        name: 'Sergio',
-        email: 'sergiobtos@hotmail.com',
-        password: 'admin'
-    }
-
-];
 
 const getUsers = (req, res, next) => {
     res.json({users: DUMMY_USERS});
@@ -53,13 +44,22 @@ const signup = async (req, res, next) => {
     res.status(201).json({user:createdUser.toObject({getters:true})});
 };
 
-const login = (req, res, next) => {
+const login = async (req, res, next) => {
     const { email, password} = req.body;
 
-    const identifiedUser = DUMMY_USERS.find(u => u.email === email );
-    if(!identifiedUser || identifiedUser.password !== password){
-        throw new HttpError('Could not identify user, credentials seem to be wrong', 401);
+    let existingUser;
+    try{
+        existingUser = await User.findOne({email: email});
+    }catch(err){
+        const error = new HttpError('Login up failed, please try again later', 500); 
+        return next(error);
     }
+
+    if(!existingUser || existingUser.password !== password){
+        const error = new HttpError('Invalid credential, could not log you in', 401); 
+        return next(error);
+    }
+
     res.json({message: 'Logged in'});
 };
 
