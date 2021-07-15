@@ -29,6 +29,7 @@ app.use((error, req, res, next) => {
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
+mongoose.set('useCreateIndex', true);
 mongoose
   .connect(process.env.URI)
   .then(() => {

@@ -10,7 +10,7 @@ const getUsers = async (req, res, next) => {
     let users;
     try {
         users = await User.find({}, '-password');
-    } catch (error) {
+    } catch (err) {
         const error = new HttpError('Fetching users failed, please try again later', 500); 
         return next(error);
     }
@@ -23,7 +23,7 @@ const signup = async (req, res, next) => {
     if(!errors.isEmpty()){
         return next(new HttpError('Invalid inputs passed, please check your data',422));
     }
-    const { name, email, password, places}= req.body;
+    const { name, email, password}= req.body;
     let existingUser;
     try{
         existingUser = await User.findOne({email: email});
@@ -41,7 +41,7 @@ const signup = async (req, res, next) => {
         email,
         image: 'image',
         password,
-        places
+        places: []
     });
 
     try {
