@@ -8,9 +8,8 @@ async function getCoordsForAddress (address){
         address)}&key=${process.env.API_KEY}`
         );
     const data = response.data; 
-
     if(!data || data.status === 'ZERO_RESULTS' || data.status === 'REQUEST_DENIED'){
-        const error = new HttpError('Could not find location for the specified address', 422);
+        const error = new HttpError(`Could not find location for the specified address ${data.status}`, 422);
         throw error;
     }
     const coordinates = data.results[0].geometry.location;
