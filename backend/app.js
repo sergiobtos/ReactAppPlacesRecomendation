@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 
@@ -8,8 +9,6 @@ const usersRoutes = require('./routes/users-routes');
 const HttpError = require('./models/http-error');
 
 const app = express();
-
-
 app.use(bodyParser.json());
 
 app.use('/api/places',placesRoutes); // => /api/places/...
@@ -28,5 +27,14 @@ app.use((error, req, res, next) => {
     res.json({message: error.message || 'An unknown error occurred!'});
 });
 
-
-app.listen(5000);
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
+mongoose
+  .connect(process.env.URI)
+  .then(() => {
+    app.listen(5000);
+	console.log('Connected to database');
+  })
+  .catch(err => {
+    console.log(err);
+  });
