@@ -19,7 +19,7 @@ const getUsers = async (req, res, next) => {
 };
 
 const signup = async (req, res, next) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req.body);
     if(!errors.isEmpty()){
         return next(new HttpError('Invalid inputs passed, please check your data',422));
     }
@@ -39,7 +39,7 @@ const signup = async (req, res, next) => {
     const createdUser = new User({
         name,
         email,
-        image: 'image',
+        image: 'https://live.staticflickr.com/7631/26849088292_36fc52ee90_b.jpg',
         password,
         places: []
     });
@@ -47,7 +47,10 @@ const signup = async (req, res, next) => {
     try {
         await createdUser.save();
       } catch (err) {
-        const error = new HttpError('Creating user failed, please try again.',500);
+          
+        const error = new HttpError(
+            'Creating user failed, please try again.',500
+            );
         return next(error);
       }
     res.status(201).json({user:createdUser.toObject({getters:true})});
@@ -69,7 +72,7 @@ const login = async (req, res, next) => {
         return next(error);
     }
 
-    res.json({message: 'Logged in'});
+    res.json({message: 'Logged in', user: existingUser.toObject({getters:true})});
 };
 
 exports.getUsers = getUsers;
