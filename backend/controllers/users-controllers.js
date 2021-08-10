@@ -84,6 +84,7 @@ const login = async (req, res, next) => {
     const { email, password} = req.body;
 
     let existingUser;
+    
     try{
         existingUser = await User.findOne({email: email});
     }catch(err){
@@ -118,7 +119,6 @@ const login = async (req, res, next) => {
             );
         return next(error);
     }
-
     res.json({userId: existingUser.id, email: existingUser.email, token: token});
 };
 
