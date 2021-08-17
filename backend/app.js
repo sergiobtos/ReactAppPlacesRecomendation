@@ -53,7 +53,7 @@ mongoose.set('useCreateIndex', true);
 mongoose
   .connect(process.env.URI)
   .then(() => {
-    app.listen(5000);
+    app.listen(process.env.PORT || 5000);
 	console.log('Connected to database');
   })
   .catch(err => {
